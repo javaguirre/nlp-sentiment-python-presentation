@@ -1,0 +1,8 @@
+apiai==1.2.3
+blinker==1.4
+Flask==0.12
+nltk==3.2.2
+python-telegram-bot==5.0.0
+requests==2.13.0
+twython==3.4.0
+termcolor==1.1.0
