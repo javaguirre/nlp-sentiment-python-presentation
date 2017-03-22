@@ -1,5 +1,3 @@
-import os
-
 from termcolor import colored, cprint
 
 from lib.apiai_client import ApiAIService
@@ -8,14 +6,12 @@ from lib.sentiment import SentimentService
 from lib.signals import processed_message_signal, incoming_message_signal
 
 
-APIAI_ACCESS_TOKEN = os.environ.get('APIAI_ACCESS_TOKEN', '')
-TELEGRAM_AUTH_TOKEN = os.environ.get('TELEGRAM_AUTH_TOKEN', '')
-
-
-def connect_nlp(message):
-    client = ApiAIService(APIAI_ACCESS_TOKEN)
+def connect_nlp(message, config):
+    client = ApiAIService(config['APIAI_ACCESS_TOKEN'])
     response = client.process(message['text'])
-    processed_message_signal.send(dict(message=message, response=response))
+    processed_message_signal.send(
+        dict(message=message, response=response),
+        config=config)
 
     if response:
         print('NLP: {}'.format(response))
@@ -27,11 +23,11 @@ def connect_nlp(message):
     return response
 
 
-def connect_telegram(data):
+def connect_telegram(data, config):
     if not data['response']:
         return
 
-    response = TelegramBotService(TELEGRAM_AUTH_TOKEN).send(
+    response = TelegramBotService(config['TELEGRAM_AUTH_TOKEN']).send(
         data['message']['conversation_id'],
         data['response'])
 
@@ -40,7 +36,7 @@ def connect_telegram(data):
     return response
 
 
-def connect_sentiment(message):
+def connect_sentiment(message, **kwargs):
     sentiment = SentimentService()
     response = sentiment.analyze(message['text'])
 

@@ -8,20 +8,16 @@ from lib.signals import incoming_message_signal
 from lib.listeners import ListenerService
 
 app = Flask(__name__)
-
-BASE_URL = os.environ.get('FLASK_BASE_URL', '')
-PORT = os.environ.get('PORT', 5000)
-WEBHOOK_URI = '/webhook'
+app.config.from_object('settings.Config')
 
 
 def init_app():
-    auth_token = os.environ.get('TELEGRAM_AUTH_TOKEN', '')
-    url = ''.join([BASE_URL, WEBHOOK_URI])
-    TelegramBotService(auth_token).register(url)
+    config = app.config
+    TelegramBotService(config['TELEGRAM_AUTH_TOKEN']).register(config['WEBHOOK_URL'])
     time.sleep(1)
 
 
-@app.route(WEBHOOK_URI, methods=['POST'])
+@app.route(app.config['WEBHOOK_PATH'], methods=['POST'])
 def webhook():
     post_data = request.get_json()
 
@@ -35,7 +31,7 @@ def webhook():
     print('NEW MESSAGE {}'.format(post_data))
 
     # Send signal
-    incoming_message_signal.send(message)
+    incoming_message_signal.send(message, config=app.config)
 
     return 'OK'
 
@@ -46,4 +42,4 @@ if __name__ == "__main__":
     # We connect with the needed signals
     ListenerService(app.config).connect()
 
-    app.run(debug=True, port=PORT)
+    app.run(debug=True, port=app.config['PORT'])
