@@ -17,7 +17,7 @@ WEBHOOK_URI = '/webhook'
 def init_app():
     auth_token = os.environ.get('TELEGRAM_AUTH_TOKEN', '')
     url = ''.join([BASE_URL, WEBHOOK_URI])
-    TelegramBotService.register(auth_token, url)
+    TelegramBotService(auth_token).register(url)
     time.sleep(1)
 
 
