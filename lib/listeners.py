@@ -45,9 +45,6 @@ def connect_sentiment(message, **kwargs):
 
 
 class ListenerService:
-    def __init__(self, config):
-        self.config = config
-
     def connect(self):
         self.connect_incoming_message_signals()
         self.connect_processed_message_signals()

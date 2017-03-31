@@ -41,6 +41,6 @@ if __name__ == "__main__":
     init_app()
 
     # We connect with the needed signals
-    ListenerService(app.config).connect()
+    ListenerService().connect()
 
     app.run(debug=True, port=app.config['PORT'])
