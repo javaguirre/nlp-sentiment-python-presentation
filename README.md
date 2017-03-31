@@ -12,7 +12,7 @@ You need a Telegram API bot key and an API key to use it, then export the
 tokens as env variables and run the `app.py` file.
 
 ```bash
-export FLASK_BASE_URL='https://hash.ngrok.io
+export FLASK_BASE_URL='https://hash.ngrok.io'
 export TELEGRAM_AUTH_TOKEN='my_token'
 export APIAI_ACCESS_TOKEN='my_apiai_token'
 export FLASK_DEBUG=1
