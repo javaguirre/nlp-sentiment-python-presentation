@@ -1,4 +1,4 @@
-from termcolor import colored, cprint
+import logging
 
 from lib.apiai_client import ApiAIService
 from lib.telegram_service import TelegramBotService
@@ -16,9 +16,8 @@ def connect_nlp(message, config):
     if response:
         print('NLP: {}'.format(response))
     else:
-        cprint(colored(
-            'NLP ERROR: {} response is not handled by the NLP'.format('response'),
-            'red'))
+        logging.info(
+            'NLP ERROR: {} response not handled by the NLP'.format('response'))
 
     return response
 
@@ -31,7 +30,7 @@ def connect_telegram(data, config):
         data['message']['conversation_id'],
         data['response'])
 
-    cprint(colored('TELEGRAM: `{}` sent'.format(data['response'])), 'blue')
+    logging.info('TELEGRAM: `{}` sent'.format(data['response']))
 
     return response
 
@@ -40,7 +39,7 @@ def connect_sentiment(message, **kwargs):
     sentiment = SentimentService()
     response = sentiment.analyze(message['text'])
 
-    print('SENTIMENT: {}'.format(response))
+    logging.info('SENTIMENT: {}'.format(response))
 
     return response
 

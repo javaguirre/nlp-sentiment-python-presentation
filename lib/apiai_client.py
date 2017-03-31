@@ -1,3 +1,4 @@
+import logging
 import json
 
 import apiai
@@ -11,13 +12,12 @@ class ApiAIService():
         request = self.client.text_request()
         request.query = text
         response = request.getresponse()
-
         response = json.loads(response.read())
 
         try:
             text = response['result']['fulfillment']['messages'][0]['speech']
         except KeyError:
-            print('NLP NOT HANDLED')
-            print(response)
+            logging.info('NLP not handled')
+            logging.info(response)
 
         return text

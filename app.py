@@ -1,5 +1,5 @@
+import logging
 import time
-import os
 
 from flask import Flask, request
 
@@ -13,11 +13,12 @@ app.config.from_object('settings.Config')
 
 def init_app():
     config = app.config
-    TelegramBotService(config['TELEGRAM_AUTH_TOKEN']).register(config['WEBHOOK_URL'])
+    TelegramBotService(
+        config['TELEGRAM_AUTH_TOKEN']).register(config['WEBHOOK_URL'])
     time.sleep(1)
 
 
-@app.route(app.config['WEBHOOK_PATH'], methods=['POST'])
+@app.route(app.config['WEBHOOK_PATH'], methods=['POST'])  # /webhook
 def webhook():
     post_data = request.get_json()
 
@@ -28,7 +29,7 @@ def webhook():
         username=post_data['message']['from']['first_name'],
         text=post_data['message']['text'])
 
-    print('NEW MESSAGE {}'.format(post_data))
+    logging.info('NEW MESSAGE {}'.format(post_data))
 
     # Send signal
     incoming_message_signal.send(message, config=app.config)
