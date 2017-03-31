@@ -5,4 +5,3 @@ nltk==3.2.2
 python-telegram-bot==5.0.0
 requests==2.13.0
 twython==3.4.0
-termcolor==1.1.0
